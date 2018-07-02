@@ -1,1 +1,43 @@
+create database telecom;
+use telecom;
+
+create table telecomData (custId STRING, gender STRING, seniorCitizen INT,
+partner STRING,Dependents STRING,tenure INT, PhoneService STRING, 
+MultipleLines STRING, InternetService STRING, OnlineSecurity 
+STRING,OnlineBackup STRING,DeviceProtection STRING, TechSupport STRING, 
+StreamingTV STRING, StreamingMovies STRING,Contract STRING,PaperlessBilling 
+STRING, PaymentMethod STRING, MonthlyCharges DOUBLE,TotalCharges 
+DOUBLE,Churn STRING) row format delimited fields terminated by ‘,’;	
+
+LOAD DATA INPATH 'Hive/TelecomData.csv' OVERWRITE INTO TABLE telecomData;
+
+--Finding the average bill paid by male and female
+select AVG(TotalCharges) from telecomData where gender= ‘Female';
+-- result : 2283.40
+
+select AVG(TotalCharges) from telecomData where gender = ‘Male';
+-- result :2283.19
+
+select PaymentMethod, count(*)  as Mode from telecomData where gender = 'Male' GROUP BY PAYMENTMETHOD ORDER BY Mode DESC LIMIT 1;
+-- result : Electronic check	1195
+
+select min(TotalCharges) from telecomData where InternetService=‘No’;
+-- result : 18.8
+
+--identifying senior citizens who have dependents and providing then 20% discount on final bill
+select custId, seniorCitizen,Dependents, (TotalCharges - (20*TotalCharges/100)) AS SrDiscount from telecomData where seniorCitizen = '1' AND Dependents =‘Yes';
+ 
+-- identifying customer, who have more than 20 yrs tenure use paperless billing
+select custId, tenure from telecomData where tenure > '20' AND PaperlessBilling = 'Yes' LIMIT 5;
+
+      
+select InternetService,Count(*) AS Total from telecomData GROUP BY InternetService ORDER BY Total DESC LIMIT 1;
+--result:  Fiber optic	3096
+
+--identifying customers who use streaming movie option and increasing their bills by 9.5%
+select custId, StreamingMovies, (MonthlyCharges +(MonthlyCharges*9.5/100)) As IncreasedMonthlyBill from telecomData where StreamingMovies ='Yes' LIMIT 5;  
+
+
+
+
 
