@@ -1,0 +1,8 @@
+These are the conclusions drawn from analysing customer Churn using telco dataset
+
+> Average bill paid by customers is 2280Rs
+> Electronic payment mode is the most used for payment
+> Customer who has not availed internet service pays very minimum amount
+> Preferred internet service is Fibre optic
+> Discounts can be provided to Senior citizens as a part of customer retention program
+> There are quiet a lot of people whose tenure is greater than 20 years
